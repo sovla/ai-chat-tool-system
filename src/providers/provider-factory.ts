@@ -3,12 +3,6 @@ import { createAnthropic } from '@ai-sdk/anthropic';
 
 type ProviderType = 'openai' | 'anthropic';
 
-interface ProviderConfig {
-  type: ProviderType;
-  model: string;
-  apiKey: string;
-}
-
 const PROVIDER_CONFIGS: Record<ProviderType, { model: string; envKey: string }> = {
   openai: { model: 'gpt-4o', envKey: 'OPENAI_API_KEY' },
   anthropic: { model: 'claude-sonnet-4-6', envKey: 'ANTHROPIC_API_KEY' },
@@ -30,23 +24,29 @@ export function createProvider(): { provider: any; model: any } {
     throw new Error(`Unknown AI provider: ${providerType}. Supported: ${Object.keys(PROVIDER_CONFIGS).join(', ')}`);
   }
 
-  const apiKey = process.env[config.envKey] || 'demo-key';
+  const apiKey = process.env[config.envKey];
+  if (!apiKey && process.env.NODE_ENV !== 'test') {
+    throw new Error(
+      `Missing required env: ${config.envKey}. Set the API key or use NODE_ENV=test for testing.`
+    );
+  }
 
   if (providerType === 'anthropic') {
-    const anthropic = createAnthropic({ apiKey });
+    const anthropic = createAnthropic({ apiKey: apiKey || 'test-key' });
     return { provider: anthropic, model: anthropic(config.model) };
   }
 
-  const openai = createOpenAI({ apiKey });
+  const openai = createOpenAI({ apiKey: apiKey || 'test-key' });
   return { provider: openai, model: openai(config.model) };
 }
 
-export function getProviderInfo(): ProviderConfig {
+export function getProviderInfo() {
   const type = (process.env.AI_PROVIDER || 'anthropic') as ProviderType;
   const config = PROVIDER_CONFIGS[type];
+  const rawKey = process.env[config.envKey];
   return {
     type,
     model: config.model,
-    apiKey: `${process.env[config.envKey]?.substring(0, 8)}...` || 'not-set',
+    apiKey: rawKey ? `${rawKey.substring(0, 8)}...` : 'not-set',
   };
 }
