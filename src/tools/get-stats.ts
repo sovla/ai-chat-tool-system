@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { sqlGuard } from '../middleware/sql-guard';
 
 export const getStats = {
   description: '거래 통계를 조회합니다. 기간별, 국가별, 품목별 집계.',
@@ -9,6 +10,9 @@ export const getStats = {
   }),
   execute: async (params: { groupBy: string; startDate?: string; endDate?: string }) => {
     const { groupBy, startDate, endDate } = params;
+
+    if (startDate) sqlGuard.validateInput(startDate);
+    if (endDate) sqlGuard.validateInput(endDate);
 
     return {
       groupBy,

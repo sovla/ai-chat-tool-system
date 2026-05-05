@@ -1,5 +1,7 @@
 # AI Chat Tool System
 
+> 이 레포지토리는 실제 프로덕션 시스템에서 패턴을 추출한 데모입니다.
+
 > LLM 챗봇에 Tool 화이트리스트 + SQL 차단 + Rate Limit을 적용한 안전한 AI 시스템
 
 ## 배경

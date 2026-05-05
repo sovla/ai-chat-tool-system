@@ -8,7 +8,7 @@ export const searchItems = {
     category: z.string().optional().describe('카테고리 필터'),
     minPrice: z.number().optional().describe('최소 가격'),
     maxPrice: z.number().optional().describe('최대 가격'),
-    limit: z.number().default(10).describe('결과 수 (최대 50)'),
+    limit: z.number().min(1).max(50).default(10).describe('결과 수 (최대 50)'),
   }),
   execute: async (params: { keyword: string; category?: string; minPrice?: number; maxPrice?: number; limit: number }) => {
     const { keyword, category, limit } = params;
