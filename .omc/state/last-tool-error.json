@@ -1,7 +1,0 @@
-{
-  "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"cd ~/projects/ai-chat-tool-system && npx tsc --noEmit 2>&1\",\"description\":\"Type check after fix\"}",
-  "error": "Exit code 2\nsrc/providers/provider-factory.ts(25,17): error TS2883: The inferred type of 'createProvider' cannot be named without a reference to 'LanguageModelV3' from '.pnpm/@ai-sdk+provider@3.0.10/node_modules/@ai-sdk/provider'. This is likely not portable. A type annotation is necessary.",
-  "timestamp": "2026-05-05T06:44:41.594Z",
-  "retry_count": 2
-}
